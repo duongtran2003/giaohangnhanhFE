@@ -87,7 +87,7 @@ export default function Register() {
               </span>
             )}
           </div>
-          <button className="bg-red-700 text-white w-full py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer">
+          <button type="submit" className="bg-red-700 text-white w-full py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer">
             Tạo tài khoản
           </button>
         </form>

@@ -6,6 +6,7 @@ import NotFound from "./notFound/NotFound";
 import Login from "./login/Login";
 import LoadingOverlay from "./share/components/LoadingOverlay";
 import Register from "./register/Register";
+import Home from "./home/Home";
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/" element={<Layout />}></Route>
+        <Route path="/" element={<Layout />}>
+          <Route path="" element={<Home />} />
+        </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <ToastContainer
