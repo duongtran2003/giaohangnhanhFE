@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import OrderStatus from "./OrderStatus";
+import OrderStatusPanel from "src/share/components/OrderStatusPanel";
 
 export default function LookupPanel() {
   const {
@@ -95,40 +95,7 @@ export default function LookupPanel() {
           </button>
         </form>
         <div className="mt-8">
-          {orderStatus && (
-            <div className="w-full">
-              <div className="mb-8 text-lg font-medium text-center">
-                Trạng thái đơn hàng
-              </div>
-              <div className="flex flex-row justify-between gap-2">
-                <div className="flex-1">
-                  <div>
-                    <span className="font-bold">Người gửi:</span>{" "}
-                    {orderStatus.sender.name} - {orderStatus.sender.phone}
-                  </div>
-                  <div>
-                    <span className="font-bold">Địa chỉ lấy hàng:</span>{" "}
-                    {orderStatus.sender.pickupAddress}
-                  </div>
-
-                  <div className="mt-4">
-                    <span className="font-bold">Người nhận:</span>{" "}
-                    {orderStatus.recipent.name} - {orderStatus.recipent.phone}
-                  </div>
-                  <div>
-                    <span className="font-bold">Địa chỉ nhận hàng:</span>{" "}
-                    {orderStatus.recipent.deliveryAddress}
-                  </div>
-                </div>
-                <div className="flex-1 flex relative flex-col gap-8 items-center">
-                  {orderStatus.orderStatus.map((status, index) => (
-                    <OrderStatus statusInfo={status} key={index} />
-                  ))}
-                  <div className="absolute h-full w-[2px] bg-red-400 z-0"></div>
-                </div>
-              </div>
-            </div>
-          )}
+          {orderStatus && <OrderStatusPanel orderStatus={orderStatus} />}
         </div>
       </div>
     </div>
