@@ -9,7 +9,7 @@ export default function Header() {
   console.log(location);
 
   return (
-    <div className="h-16 bg-red-500 px-8 shadow-md flex flex-row items-center justify-between">
+    <header className="h-16 bg-red-600 px-8 shadow-md flex flex-row items-center justify-between">
       <div
         className="font-medium text-lg text-white flex flex-row gap-4 items-center"
         onClick={() => toast.success("test toaster")}
@@ -27,6 +27,6 @@ export default function Header() {
           Đăng nhập/Đăng kí
         </Link>
       )}
-    </div>
+    </header>
   );
 }

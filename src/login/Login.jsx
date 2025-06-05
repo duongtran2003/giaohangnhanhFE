@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import Footer from "src/layout/components/Footer";
 
 export default function Login() {
   const {
@@ -13,7 +14,7 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-gray-100 w-[100vw] h-[100vh] pt-24">
+    <div className="bg-gray-100 w-[100vw] pt-24 flex-col flex gap-80">
       <div className="bg-white w-[360px] pb-6 min-w-[360px] max-w-[360px] h-fit px-8 shadow-lg rounded-sm mx-auto">
         <div className="text-center w-full py-4 text-red-600">Đăng nhập</div>
         <form className="" onSubmit={handleSubmit(onSubmit)}>
@@ -56,6 +57,7 @@ export default function Login() {
           </Link>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
