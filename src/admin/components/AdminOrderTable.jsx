@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import OrderTableFilter from "./OrderTableFilter";
+import AdminOrderTableFilter from "./AdminOrderTableFilter";
 import Pagination from "src/share/components/Pagination";
-import OrderCancelModal from "./OrderCancelModal";
 import { MoonLoader } from "react-spinners";
+import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
+import AdminOrderCancelModal from "./AdminOrderCancelModal";
+import AdminOrderAssignModal from "./AdminOrderAssignModal";
 
-export default function OrderTable() {
+export default function AdminOrderTable() {
   const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [isCancelModalShow, setIsCancelModalShow] = useState(false);
+  const [isAssignModalShow, setIsAssignModalShow] = useState(false);
   const [cancellingId, setCancellingId] = useState(null);
+  const [assigningId, setAssigningId] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
 
   const handleFilterChange = (filter) => {
@@ -40,12 +44,27 @@ export default function OrderTable() {
     setIsCancelModalShow(true);
   };
 
+  const handleAssignClick = (event, id) => {
+    event.stopPropagation();
+    setAssigningId(id);
+    setIsAssignModalShow(true);
+  };
+
   const handleCancelModalClose = () => {
     setCancellingId(null);
     setIsCancelModalShow(false);
   };
 
+  const handleAssignModalClose = () => {
+    setAssigningId(null);
+    setIsAssignModalShow(false);
+  };
+
   const handleCancelOK = () => {
+    // call api here
+  };
+
+  const handleAssignOK = () => {
     // call api here
   };
 
@@ -53,10 +72,9 @@ export default function OrderTable() {
     {
       id: 1,
       code: "D1",
-      recipent: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      recipentPhone: "123456123456123456123456123456123456",
-      shippingAddress: "HHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noia noi",
-      shippingCost: 123344569,
+      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
+      pickupAddress: "123456123456123456123456123456123456",
+      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
       description:
         "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
       status: "IN_TRANSIT",
@@ -64,21 +82,19 @@ export default function OrderTable() {
     {
       id: 2,
       code: "D2",
-      recipent: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      recipentPhone: "123456123456123456123456123456123456",
-      shippingAddress: "HHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noia noi",
-      shippingCost: 123344569,
+      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
+      pickupAddress: "123456123456123456123456123456123456",
+      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
       description:
-        "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
+        "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
       status: "IN_TRANSIT",
     },
     {
       id: 3,
       code: "D3",
-      recipent: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      recipentPhone: "123456123456123456123456123456123456",
-      shippingAddress: "HHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noiHa noia noi",
-      shippingCost: 123344569,
+      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
+      pickupAddress: "123456123456123456123456123456123456",
+      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
       description:
         "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
       status: "IN_TRANSIT",
@@ -92,7 +108,7 @@ export default function OrderTable() {
           <MoonLoader color="#EE0033" />
         </div>
       )}
-      <OrderTableFilter filters={filter} onFilterChange={handleFilterChange} />
+      <AdminOrderTableFilter filters={filter} onFilterChange={handleFilterChange} />
       <div className="overflow-x-auto max-w-full mb-2 w-fit shadow-md rounded-sm mt-4">
         <table className="text-sm min-w-fit w-fit">
           <thead className="bg-gray-900 text-white">
@@ -101,16 +117,13 @@ export default function OrderTable() {
                 Mã đơn
               </th>
               <th className="px-3 py-4 text-left min-w-[150px] max-w-[150px]">
-                Người nhận
-              </th>
-              <th className="px-3 py-4 text-left min-w-[120px] max-w-[120px]">
-                SĐT
+                Người gửi
               </th>
               <th className="px-3 py-4 text-left min-w-[150px] max-w-[150px]">
-                Địa chỉ nhận
+                Địa chỉ lấy
               </th>
-              <th className="px-3 py-4 text-left min-w-[100px] max-w-[100px]">
-                Giá cước
+              <th className="px-3 py-4 text-left min-w-[150x] max-w-[150px]">
+                Địa chỉ nhận
               </th>
               <th className="px-3 py-4 text-left min-w-[500px] max-w-[500px]">
                 Mô tả
@@ -118,7 +131,7 @@ export default function OrderTable() {
               <th className="px-3 py-4 text-left min-w-[120px] max-w-[120px]">
                 Trạng thái
               </th>
-              <th className="px-3 py-4 text-left max-w-[130px] min-w-[130px]">
+              <th className="px-3 py-4 text-left max-w-[250px] min-w-[250px]">
                 Hành động
               </th>
             </tr>
@@ -141,27 +154,21 @@ export default function OrderTable() {
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
-                  title={order.recipent}
+                  title={order.sender}
                 >
-                  {order.recipent}
+                  {order.sender}
                 </td>
                 <td
-                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[120px] max-w-[120px]"
-                  title={order.recipentPhone}
+                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
+                  title={order.pickupAddress}
                 >
-                  {order.recipentPhone}
+                  {order.pickupAddress}
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
                   title={order.shippingAddress}
                 >
-                  {order.recipentPhone}
-                </td>
-                <td
-                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[100px] max-w-[100px]"
-                  title={order.shippingCost}
-                >
-                  {order.recipentPhone}
+                  {order.shippingAddress}
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[500px] max-w-[500px]"
@@ -175,7 +182,7 @@ export default function OrderTable() {
                 >
                   {order.status}
                 </td>
-                <td className="px-2 py-3 max-w-[130px] min-w-[130px]">
+                <td className="px-2 py-3 max-w-[250px] min-w-[250px]">
                   <div className="flex gap-2 items-center">
                     <button
                       onClick={(e) => handleCancelClick(e, order.id)}
@@ -183,6 +190,13 @@ export default function OrderTable() {
                     >
                       <DeleteOutlineIcon fontSize="small" />
                       <span>Hủy đơn</span>
+                    </button>
+                    <button
+                      onClick={(e) => handleAssignClick(e, order.id)}
+                      className="px-4 flex items-center cursor-pointer bg-green-700 hover:brightness-95 duration-100 text-white rounded-sm py-2"
+                    >
+                      <AssignmentAddIcon fontSize="small" />
+                      <span>Giao đơn</span>
                     </button>
                   </div>
                 </td>
@@ -201,10 +215,17 @@ export default function OrderTable() {
         />
       </div>
       {isCancelModalShow && (
-        <OrderCancelModal
+        <AdminOrderCancelModal
           onCancel={handleCancelModalClose}
           onOK={handleCancelOK}
           cancellingId={cancellingId}
+        />
+      )}
+      {isAssignModalShow && (
+        <AdminOrderAssignModal
+          onCancel={handleAssignModalClose}
+          onOK={handleAssignOK}
+          cancellingId={assigningId}
         />
       )}
     </div>

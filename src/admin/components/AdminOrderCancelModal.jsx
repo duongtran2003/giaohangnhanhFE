@@ -1,4 +1,4 @@
-export default function OrderCancelModal({ onCancel, onOK, cancellingId }) {
+export default function AdminOrderCancelModal({ onCancel, onOK, cancellingId }) {
   const handleCancel = () => {
     // Chưa biết gửi gì ra
     onOK();

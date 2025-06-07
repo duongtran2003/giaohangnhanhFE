@@ -1,6 +1,6 @@
 import StatusDropdownFilter from "src/share/components/StatusDropdownFilter";
 
-export default function OrderTableFilter({ onFilterChange, filters }) {
+export default function AdminOrderTableFilter({ onFilterChange, filters }) {
   const resetFilter = () => {
     onFilterChange({});
   };
@@ -24,21 +24,12 @@ export default function OrderTableFilter({ onFilterChange, filters }) {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label className="text-sm">Tên người nhận</label>
+        <label className="text-sm">Tên người gửi</label>
         <input
           type="text"
-          onChange={(e) => handleFieldChange("recipent_name", e.target.value)}
-          placeholder="Tên người nhận"
+          onChange={(e) => handleFieldChange("sender_name", e.target.value)}
+          placeholder="Tên người gửi"
           className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-sm">SĐT người nhận</label>
-        <input
-          type="text"
-          onChange={(e) => handleFieldChange("recipent_phone", e.target.value)}
-          placeholder="SĐT người nhận"
-          className="bg-gray-100 border border-gray-300 w-44 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
         />
       </div>
       <div className="flex flex-col gap-1">

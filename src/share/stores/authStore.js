@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import roles from "../constants/roles";
 
 export const useAuthStore = create(
@@ -7,6 +6,7 @@ export const useAuthStore = create(
     user: {
       fullName: "duong",
       roles: [
+        // roles.ADMIN
         roles.CUSTOMER
       ]
     },

@@ -36,12 +36,32 @@ export default function Navbar() {
         handler: null,
         options: [
           {
-            text: "Danh sách đơn hàng",
+            text: "Danh sách",
             handler: () => navigate("customer/my-orders"),
           },
           {
-            text: "Xem thống kê",
+            text: "Tạo mới",
+            handler: () => navigate("customer/create-order"),
+          },
+          {
+            text: "Thống kê",
             handler: () => navigate("customer/orders-stat"),
+          },
+        ],
+      },
+    ];
+  }, []);
+
+  const adminNavbarItems = useMemo(() => {
+    return [
+      {
+        text: "Quản lí",
+        isDropdown: true,
+        handler: null,
+        options: [
+          {
+            text: "Đơn hàng",
+            handler: () => navigate("admin/orders"),
           },
         ],
       },
@@ -54,8 +74,12 @@ export default function Navbar() {
       items.push(...customerNavbarItems);
     }
 
+    if (user?.roles[0] == roles.ADMIN) {
+      items.push(...adminNavbarItems);
+    }
+
     return items;
-  }, [user, commonNavbarItems, customerNavbarItems]);
+  }, [user, commonNavbarItems, customerNavbarItems, adminNavbarItems]);
 
   return (
     <div className="bg-white sticky left-0 w-full top-0 h-14 shadow-md gap-8 flex flex-row items-center px-8 z-10">
