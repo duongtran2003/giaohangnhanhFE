@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router";
 import Dropdown from "src/share/components/Dropdown";
+import roles from "src/share/constants/roles";
 import { useAuthStore } from "src/share/stores/authStore";
 
 export default function Navbar() {
@@ -49,9 +50,9 @@ export default function Navbar() {
 
   const navbarItems = useMemo(() => {
     const items = [...commonNavbarItems];
-    // if (user?.role == "customer") {
+    if (user?.roles[0] == roles.CUSTOMER) {
       items.push(...customerNavbarItems);
-    // }
+    }
 
     return items;
   }, [user, commonNavbarItems, customerNavbarItems]);

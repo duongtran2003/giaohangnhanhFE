@@ -1,6 +1,6 @@
 import { useState } from "react";
-import LookupPanel from "./components/LookupPanel";
-import EstimatePanel from "./components/EstimatePanel";
+import LookupPanel from "../components/LookupPanel";
+import EstimatePanel from "../components/EstimatePanel";
 
 export default function Home() {
   // "Lookup" | "Estimate"

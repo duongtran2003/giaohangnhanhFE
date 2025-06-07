@@ -26,7 +26,7 @@ export default function OrderStatusPanel({ orderStatus }) {
             {orderStatus.recipent.deliveryAddress}
           </div>
         </div>
-        <div className="flex-1 flex relative flex-col gap-8 items-center">
+        <div className="flex-1 flex relative h-fit flex-col gap-8 items-center">
           {orderStatus.orderStatus.map((status, index) => (
             <OrderStatus statusInfo={status} key={index} />
           ))}

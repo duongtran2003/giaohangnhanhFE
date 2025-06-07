@@ -6,10 +6,11 @@ import NotFound from "./notFound/NotFound";
 import Login from "./login/Login";
 import LoadingOverlay from "./share/components/LoadingOverlay";
 import Register from "./register/Register";
-import Home from "./home/Home";
-import OrderList from "./order/views/OrderList";
-import OrderStat from "./order/views/OrderStat";
 import VerifyAccount from "./register/VerifyAccount";
+import Home from "./guest/views/Home";
+import OrderList from "./customer/views/OrderList";
+import OrderStat from "./customer/views/OrderStat";
+import CustomerLayout from "./layout/CustomerLayout";
 
 function App() {
   return (
@@ -19,9 +20,7 @@ function App() {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/auth/verify-email/:token" element={<VerifyAccount />} />
         <Route element={<Layout />}>
-          <Route element={<GuestLayout />}>
-            <Route path="/" element={<Home />} />
-          </Route>
+          <Route path="/" element={<Home />} />
           <Route element={<CustomerLayout />}>
             <Route path="/my-orders" element={<OrderList />} />
             <Route path="/orders-stat" element={<OrderStat />} />
