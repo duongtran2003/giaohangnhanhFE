@@ -19,9 +19,13 @@ function App() {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/auth/verify-email/:token" element={<VerifyAccount />} />
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/my-orders" element={<OrderList />} />
-          <Route path="/orders-stat" element={<OrderStat />} />
+          <Route element={<GuestLayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+          <Route element={<CustomerLayout />}>
+            <Route path="/my-orders" element={<OrderList />} />
+            <Route path="/orders-stat" element={<OrderStat />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

@@ -31,6 +31,10 @@ export const authApi = {
   verifyAccount: (token) => {
     return api.patch(`${API_PREFIX.auth}/auth/verify-email/${token}`);
   },
+
+  getMe: () => {
+    return api.get(`${API_PREFIX.auth}/user/my-info`);
+  },
 };
 
 export const thirdPartyApi = {

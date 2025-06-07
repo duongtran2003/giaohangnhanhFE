@@ -4,7 +4,7 @@ const tokenUtils = {
   },
 
   setAccessToken: (token) => {
-    localStorage.set("access-token", token);
+    localStorage.setItem("access-token", token);
   },
 
   clearAccessToken: () => {

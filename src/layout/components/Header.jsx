@@ -9,7 +9,6 @@ export default function Header() {
   const user = useAuthStore((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(location);
 
   const optionsList = useMemo(() => {
     return [
@@ -33,7 +32,7 @@ export default function Header() {
         <div className="text-white">
           <Dropdown
             align={"right"}
-            text={user.name}
+            text={user.fullName}
             optionsList={optionsList}
           />
         </div>
