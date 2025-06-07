@@ -21,16 +21,17 @@ export default function Register() {
 
     try {
       const response = await authApi.register(data);
+      toast.success(response.data?.message);
       navigate("/login");
     } catch (err) {
-      toast.error(err?.response?.message || "Có lỗi xảy ra");
+      toast.error(err?.response.data.message || "Có lỗi xảy ra");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gray-100 w-[100vw] pt-10 flex-col flex gap-80">
+    <div className="bg-gray-100 w-full pt-10 flex-col flex gap-80">
       <div className="bg-white pb-6 max-w-[720px] min-w-[720px] w-[720px] h-fit px-8 shadow-lg rounded-sm mx-auto">
         <div className="text-center w-full py-4 text-red-600">
           Tạo tài khoản
@@ -153,26 +154,6 @@ export default function Register() {
                 {errors.address && (
                   <span className="text-xs text-red-500 mt-0.5">
                     {errors.address.message}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <label className="text-sm">Bạn là:</label>
-                <select
-                  {...register("accountType", {
-                    required: "Vui lòng chọn loại tài khoản",
-                  })}
-                  className="bg-gray-100 border border-gray-300 px-2 py-1.5 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
-                >
-                  <option value="">Chọn loại tài khoản</option>
-                  <option value={accountType.DELIVERY_STAFF}>
-                    Nhân viên giao hàng
-                  </option>
-                  <option value={accountType.CUSTOMER}>Khách hàng</option>
-                </select>
-                {errors.accountType && (
-                  <span className="text-xs text-red-500 mt-0.5">
-                    {errors.accountType.message}
                   </span>
                 )}
               </div>

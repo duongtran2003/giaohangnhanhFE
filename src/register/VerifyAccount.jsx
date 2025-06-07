@@ -9,8 +9,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 export default function VerifyAccount() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     let timeoutId;

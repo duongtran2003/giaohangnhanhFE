@@ -57,7 +57,7 @@ export default function Navbar() {
   }, [user, commonNavbarItems, customerNavbarItems]);
 
   return (
-    <div className="bg-white sticky left-0 w-[100vw] top-0 h-14 shadow-md gap-8 flex flex-row items-center px-8 z-10">
+    <div className="bg-white sticky left-0 w-full top-0 h-14 shadow-md gap-8 flex flex-row items-center px-8 z-10">
       {navbarItems.map((item, index) => (
         <div key={index}>
           {item.isDropdown ? (
