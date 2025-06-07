@@ -10,8 +10,8 @@ export default function Layout() {
   return (
     <div>
       <Header />
-      {user && <Navbar />}
-      <div className="w-full pb-80 bg-gray-100">
+      <Navbar />
+      <div className="w-full pb-80">
         <Outlet />
       </div>
       <Footer />

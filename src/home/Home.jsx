@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LookupPanel from "./components/LookupPanel";
+import EstimatePanel from "./components/EstimatePanel";
 
 export default function Home() {
   // "Lookup" | "Estimate"
@@ -32,6 +33,7 @@ export default function Home() {
         </div>
       </div>
       {currentTab === "Lookup" && <LookupPanel />}
+      {currentTab === "Estimate" && <EstimatePanel />}
     </div>
   );
 }

@@ -1,16 +1,38 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 import Footer from "src/layout/components/Footer";
+import { authApi } from "src/share/api";
+import { useLoadingStore } from "src/share/stores/loadingStore";
 
 export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const setLoading = useLoadingStore((state) => state.setLoading);
+
+  const onSubmit = async (data) => {
     console.log("post this:", data);
+    setLoading(true);
+    try {
+      const response = await authApi.login(data);
+      console.log(response);
+    } catch (err) {
+      if (err?.response?.status == 401) {
+        setError("username", {
+          type: "custom",
+          message: "Sai thông tin đăng nhập",
+        });
+      } else {
+        toast.error(err?.response?.message || "Có lỗi xảy ra");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +68,10 @@ export default function Login() {
               </span>
             )}
           </div>
-          <button type="submit" className="bg-red-700 text-white w-full py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer">
+          <button
+            type="submit"
+            className="bg-red-700 text-white w-full py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer"
+          >
             Đăng nhập
           </button>
         </form>

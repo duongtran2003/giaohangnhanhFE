@@ -1,9 +1,9 @@
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white pt-10 pb-6 px-4">
+    <footer className="bg-gray-900 text-white pt-10 pb-6 px-4 w-full">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h2 className="text-xl font-semibold mb-2">Giao Hàng Nhanh</h2>
+          <h2 className="text-xl font-semibold mb-2">Odms</h2>
           <p className="text-sm text-gray-400">
             Dịch vụ giao hàng nhanh chóng, an toàn và đáng tin cậy. Phục vụ 24/7 trong địa bàn nội thành Hà Nội.
           </p>
@@ -72,10 +72,10 @@ export default function Footer() {
           <p className="text-sm text-gray-300">
             Email:{" "}
             <a
-              href="mailto:support@giaohangnhanh.vn"
+              href="mailto:support@odms.vn"
               className="hover:text-white"
             >
-              support@giaohangnhanh.vn
+              support@odms.vn
             </a>
           </p>
           <p className="text-sm text-gray-300">
@@ -85,7 +85,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Giao Hàng Nhanh. All rights reserved.
+        © {new Date().getFullYear()} Odms. All rights reserved.
       </div>
     </footer>
   );
