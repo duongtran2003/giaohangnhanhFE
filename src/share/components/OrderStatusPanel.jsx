@@ -16,7 +16,6 @@ export default function OrderStatusPanel({ orderStatus }) {
             <span className="font-bold">Địa chỉ lấy hàng:</span>{" "}
             {orderStatus.sender.pickupAddress}
           </div>
-
           <div className="mt-4">
             <span className="font-bold">Người nhận:</span>{" "}
             {orderStatus.recipent.name} - {orderStatus.recipent.phone}

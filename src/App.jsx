@@ -22,8 +22,8 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route element={<CustomerLayout />}>
-            <Route path="/my-orders" element={<OrderList />} />
-            <Route path="/orders-stat" element={<OrderStat />} />
+            <Route path="customer/my-orders" element={<OrderList />} />
+            <Route path="customer/orders-stat" element={<OrderStat />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>

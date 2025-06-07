@@ -37,11 +37,11 @@ export default function Navbar() {
         options: [
           {
             text: "Danh sách đơn hàng",
-            handler: () => navigate("/my-orders"),
+            handler: () => navigate("customer/my-orders"),
           },
           {
             text: "Xem thống kê",
-            handler: () => navigate("/orders-stat"),
+            handler: () => navigate("customer/orders-stat"),
           },
         ],
       },
