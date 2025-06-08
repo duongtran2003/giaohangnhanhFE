@@ -6,7 +6,14 @@ export default function AdminOrderTableFilter({
   onFilter,
 }) {
   const resetFilter = () => {
-    onFilterChange({});
+    onFilterChange({
+      code: "",
+      sender_name: "",
+      description: "",
+      statuses: [],
+      startDate: "",
+      endDate: "",
+    });
   };
   const handleStatusChange = (statuses) => {
     onFilterChange({ ...filters, statuses });
@@ -22,6 +29,7 @@ export default function AdminOrderTableFilter({
         <label className="text-sm">Mã đơn</label>
         <input
           type="text"
+          value={filters.code}
           onChange={(e) => handleFieldChange("code", e.target.value)}
           placeholder="Mã đơn"
           className="bg-gray-100 border border-gray-300 w-32 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
@@ -31,6 +39,7 @@ export default function AdminOrderTableFilter({
         <label className="text-sm">Tên người gửi</label>
         <input
           type="text"
+          value={filters.sender_name}
           onChange={(e) => handleFieldChange("sender_name", e.target.value)}
           placeholder="Tên người gửi"
           className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
@@ -40,6 +49,7 @@ export default function AdminOrderTableFilter({
         <label className="text-sm">Mô tả</label>
         <input
           type="text"
+          value={filters.description}
           onChange={(e) => handleFieldChange("description", e.target.value)}
           placeholder="Mô tả"
           className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
@@ -55,6 +65,7 @@ export default function AdminOrderTableFilter({
         <label className="text-sm">Ngày bắt đầu</label>
         <input
           type="date"
+          value={filters.startDate}
           onChange={(e) => handleFieldChange("startDate", e.target.value)}
           placeholder="Mô tả"
           className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
@@ -64,6 +75,7 @@ export default function AdminOrderTableFilter({
         <label className="text-sm">Ngày kết thúc</label>
         <input
           type="date"
+          value={filters.endDate}
           onChange={(e) => handleFieldChange("endDate", e.target.value)}
           placeholder="Mô tả"
           className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"

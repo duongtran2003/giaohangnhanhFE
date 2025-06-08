@@ -52,31 +52,9 @@ export const orderApi = {
     );
   },
 
-  getAdminOrder: (filter, pageIndex, pageSize) => {
-    const params = {
-      pageIndex: pageIndex,
-      pageSize: pageSize,
-      orderCode: filter.code ? filter.code : null,
-      senderName: filter.sender_name ? filter.sender_name : null,
-      description: filter.description ? filter.description : null,
-      orderStatuses:
-        !filter?.statuses ||
-        filter.statuses.length === 0 ||
-        filter.statuses.length === 7
-          ? null
-          : filter.statuses.join(","),
-      startDate: filter.startDate ? filter.startDate : null,
-      endDate: filter.endDate ? filter.endDate : null,
-    };
-    
-    const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([_, v]) => v != null),
-    );
-
-    const urlParams = new URLSearchParams(filteredParams);
-
+  getAdminOrder: (queryString) => {
     return api.get(
-      `${API_PREFIX.order}/order/filter/admin?${urlParams.toString()}`,
+      `${API_PREFIX.order}/order/filter/admin?${queryString}`,
     );
   },
 };

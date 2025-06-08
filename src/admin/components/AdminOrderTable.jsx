@@ -6,12 +6,19 @@ import AssignmentAddIcon from "@mui/icons-material/AssignmentAdd";
 import AdminOrderAssignModal from "./AdminOrderAssignModal";
 import { orderApi } from "src/share/api";
 import { toast } from "react-toastify";
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 export default function AdminOrderTable() {
-  const [filter, setFilter] = useState({});
+  const [filter, setFilter] = useState({
+    code: "",
+    sender_name: "",
+    description: "",
+    statuses: [],
+    startDate: "",
+    endDate: "",
+  });
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [isAssignModalShow, setIsAssignModalShow] = useState(false);
   const [assigningId, setAssigningId] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
@@ -31,10 +38,6 @@ export default function AdminOrderTable() {
     setPage(page);
   };
 
-  useEffect(() => {
-    console.log("filter change in useeffect");
-  }, [filter]);
-
   const handleRowClick = (id) => {
     window.open(`/admin/order/detail/${id}`, "_blank");
   };
@@ -47,39 +50,94 @@ export default function AdminOrderTable() {
     setIsAssignModalShow(true);
   };
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const result = {};
+
+    for (const [key, value] of params.entries()) {
+      result[key] = value;
+    }
+
+    const newFilter = {
+      code: result.orderCode ?? "",
+      sender_name: result.senderName ?? "",
+      description: result.description ?? "",
+      statuses: result?.orderStatuses?.split(",") ?? [],
+      startDate: result.startDate ?? "",
+      endDate: result.endDate ?? "",
+    };
+
+    setFilter({
+      code: newFilter.code || "",
+      sender_name: newFilter.sender_name || "",
+      description: newFilter.description || "",
+      statuses: newFilter.statuses || [],
+      startDate: newFilter.startDate || "",
+      endDate: newFilter.endDate || "",
+    });
+    setPage(result.pageIndex);
+    setPageSize(result.pageSize);
+    fetchData(url.search);
+  }, []);
+
   const handleAssignModalClose = () => {
     setAssigningId(null);
     setIsAssignModalShow(false);
-  };
-
-  const handleCancelOK = () => {
-    // call api here
   };
 
   const handleAssignOK = () => {
     // call api here
   };
 
-  const handleFilter = async () => {
-    setIsLoadingData(true);
+  const convertToQueryString = () => {
+    const params = {
+      pageIndex: page,
+      pageSize: pageSize,
+      orderCode: filter.code ? filter.code : null,
+      senderName: filter.sender_name ? filter.sender_name : null,
+      description: filter.description ? filter.description : null,
+      orderStatuses:
+        !filter?.statuses ||
+        filter.statuses.length === 0 ||
+        filter.statuses.length === 7
+          ? null
+          : filter.statuses.join(","),
+      startDate: filter.startDate ? filter.startDate : null,
+      endDate: filter.endDate ? filter.endDate : null,
+    };
+
+    const filteredParams = Object.fromEntries(
+      Object.entries(params).filter(([_, v]) => v != null),
+    );
+
+    const urlParams = new URLSearchParams(filteredParams);
+
+    return urlParams.toString();
+  };
+
+  const fetchData = async (queryString) => {
     try {
-      const response = await orderApi.getAdminOrder(filter, page, pageSize);
-      console.log(response.data);
+      setIsLoadingData(true);
+      const response = await orderApi.getAdminOrder(queryString);
       setPage(response.data.data.pageInfo.pageIndex);
       setPageSize(response.data.data.pageInfo.pageSize);
       setTotalRecords(response.data.data.pageInfo.totalElements);
       setTableData(response.data.data.data);
     } catch (err) {
-      console.log(err);
       toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
     } finally {
       setIsLoadingData(false);
     }
   };
 
-  useEffect(() => {
-    handleFilter();
-  }, []);
+  const handleFilter = async () => {
+    const url = new URL(window.location.href);
+    const queryString = convertToQueryString();
+    url.search = queryString;
+    window.history.replaceState(null, "", url.toString());
+    fetchData(queryString);
+  };
 
   return (
     <div className="max-w-fit flex flex-col relative">
@@ -121,6 +179,11 @@ export default function AdminOrderTable() {
             </tr>
           </thead>
           <tbody>
+            {tableData.length == 0 && (
+              <div className="text-gray-500 italic py-4 text-center">
+                Không có dữ liệu...
+              </div>
+            )}
             {tableData.map((order, index) => (
               <tr
                 key={order.orderCode}
@@ -168,7 +231,9 @@ export default function AdminOrderTable() {
                 <td className="px-2 py-3 max-w-[250px] min-w-[250px]">
                   <div className="flex gap-2 items-center">
                     <button
-                      onClick={() => handleAssignClick(order.orderCode, order.orderStatus)}
+                      onClick={() =>
+                        handleAssignClick(order.orderCode, order.orderStatus)
+                      }
                       className="px-4 flex items-center cursor-pointer bg-green-700 hover:brightness-95 duration-100 text-white rounded-sm py-2"
                       style={{
                         backgroundColor:
