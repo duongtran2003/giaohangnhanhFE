@@ -14,6 +14,8 @@ import CustomerLayout from "./layout/CustomerLayout";
 import AdminLayout from "./layout/AdminLayout";
 import AdminOrderList from "./admin/views/AdminOrderList";
 import CreateOrder from "./customer/views/CreateOrder";
+import OrderDetail from "./customer/views/OrderDetail";
+import AdminOrderDetail from "./admin/views/AdminOrderDetail";
 
 function App() {
   return (
@@ -28,9 +30,11 @@ function App() {
             <Route path="customer/my-orders" element={<OrderList />} />
             <Route path="customer/orders-stat" element={<OrderStat />} />
             <Route path="customer/create-order" element={<CreateOrder />} />
+            <Route path="customer/order/detail/:orderCode" element={<OrderDetail />} />
           </Route>
           <Route element={<AdminLayout />}>
             <Route path="admin/orders" element={<AdminOrderList />} />
+            <Route path="admin/order/detail/:orderCode" element={<AdminOrderDetail />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>

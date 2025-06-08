@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { deliveryApi } from "src/share/api";
+import { useLoadingStore } from "src/share/stores/loadingStore";
 
-export default function AdminOrderAssignModal({ onCancel, onOK, cancellingId }) {
+export default function AdminOrderAssignModal({ onCancel, onOK }) {
   const [selectedDriver, setSelectedDriver] = useState(null);
+  const [drivers, setDrivers] = useState([]);
+  const setLoading = useLoadingStore((state) => state.setLoading);
 
-  const drivers = [
-    { id: 1, name: "Nguyễn Văn A" },
-    { id: 2, name: "Trần Thị B" },
-    { id: 3, name: "Lê Văn C" },
-  ];
+  useEffect(() => {
+    setLoading(true);
+    deliveryApi
+      .getDrivers()
+      .then((res) => {
+        console.log(res);
+        setDrivers(res.data.data);
+      })
+      .catch((err) => {
+        toast.error(err?.resposne?.data?.message || "Có lỗi xảy ra");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const handleAssign = () => {
-    if (!selectedDriver) return alert("Vui lòng chọn tài xế");
-    // Chưa biết gửi gì ra
+    if (!selectedDriver) {
+      toast.error("Vui lòng chọn tài xế");
+      return;
+    }
     onOK();
   };
 
@@ -28,7 +45,9 @@ export default function AdminOrderAssignModal({ onCancel, onOK, cancellingId }) 
           Giao đơn hàng cho tài xế
         </div>
         <div className="px-4 flex-1 py-4 flex flex-col gap-2">
-          <label className="text-sm text-gray-800 font-medium">Chọn tài xế:</label>
+          <label className="text-sm text-gray-800 font-medium">
+            Chọn tài xế:
+          </label>
           <select
             value={selectedDriver}
             onChange={(e) => setSelectedDriver(e.target.value)}

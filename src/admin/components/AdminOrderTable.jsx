@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AdminOrderTableFilter from "./AdminOrderTableFilter";
 import Pagination from "src/share/components/Pagination";
 import { MoonLoader } from "react-spinners";
-import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
-import AdminOrderCancelModal from "./AdminOrderCancelModal";
+import AssignmentAddIcon from "@mui/icons-material/AssignmentAdd";
 import AdminOrderAssignModal from "./AdminOrderAssignModal";
+import { orderApi } from "src/share/api";
+import { toast } from "react-toastify";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export default function AdminOrderTable() {
   const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [isCancelModalShow, setIsCancelModalShow] = useState(false);
   const [isAssignModalShow, setIsAssignModalShow] = useState(false);
-  const [cancellingId, setCancellingId] = useState(null);
   const [assigningId, setAssigningId] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [tableData, setTableData] = useState([]);
 
   const handleFilterChange = (filter) => {
     setFilter(filter);
@@ -35,24 +36,15 @@ export default function AdminOrderTable() {
   }, [filter]);
 
   const handleRowClick = (id) => {
-    window.open(`/order/${id}`, "_blank");
+    window.open(`/admin/order/detail/${id}`, "_blank");
   };
 
-  const handleCancelClick = (event, id) => {
-    event.stopPropagation();
-    setCancellingId(id);
-    setIsCancelModalShow(true);
-  };
-
-  const handleAssignClick = (event, id) => {
-    event.stopPropagation();
+  const handleAssignClick = (id, status) => {
+    if (status != "Tạo đơn") {
+      return;
+    }
     setAssigningId(id);
     setIsAssignModalShow(true);
-  };
-
-  const handleCancelModalClose = () => {
-    setCancellingId(null);
-    setIsCancelModalShow(false);
   };
 
   const handleAssignModalClose = () => {
@@ -68,38 +60,26 @@ export default function AdminOrderTable() {
     // call api here
   };
 
-  const tableData = [
-    {
-      id: 1,
-      code: "D1",
-      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      pickupAddress: "123456123456123456123456123456123456",
-      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
-      description:
-        "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
-      status: "IN_TRANSIT",
-    },
-    {
-      id: 2,
-      code: "D2",
-      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      pickupAddress: "123456123456123456123456123456123456",
-      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
-      description:
-        "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
-      status: "IN_TRANSIT",
-    },
-    {
-      id: 3,
-      code: "D3",
-      sender: "Duong TranDuong TranDuong TranDuong TranDuong TranDuong Tran",
-      pickupAddress: "123456123456123456123456123456123456",
-      shippingAddress: "aowidjaiowdj aowidjaiowdj ajajajajaj ajawjdjawdjawoidjawdoiawja ajawjdajwdj",
-      description:
-        "blah blah this is a deliveryblah blah this is a deliveryblah blah this is a delivery",
-      status: "IN_TRANSIT",
-    },
-  ];
+  const handleFilter = async () => {
+    setIsLoadingData(true);
+    try {
+      const response = await orderApi.getAdminOrder(filter, page, pageSize);
+      console.log(response.data);
+      setPage(response.data.data.pageInfo.pageIndex);
+      setPageSize(response.data.data.pageInfo.pageSize);
+      setTotalRecords(response.data.data.pageInfo.totalElements);
+      setTableData(response.data.data.data);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
+
+  useEffect(() => {
+    handleFilter();
+  }, []);
 
   return (
     <div className="max-w-fit flex flex-col relative">
@@ -108,12 +88,16 @@ export default function AdminOrderTable() {
           <MoonLoader color="#EE0033" />
         </div>
       )}
-      <AdminOrderTableFilter filters={filter} onFilterChange={handleFilterChange} />
+      <AdminOrderTableFilter
+        filters={filter}
+        onFilterChange={handleFilterChange}
+        onFilter={handleFilter}
+      />
       <div className="overflow-x-auto max-w-full mb-2 w-fit shadow-md rounded-sm mt-4">
         <table className="text-sm min-w-fit w-fit">
           <thead className="bg-gray-900 text-white">
             <tr>
-              <th className="px-3 py-4 text-left min-w-[80px] max-w-[80px]">
+              <th className="px-3 py-4 text-left min-w-[200px] max-w-[200px]">
                 Mã đơn
               </th>
               <th className="px-3 py-4 text-left min-w-[150px] max-w-[150px]">
@@ -122,10 +106,10 @@ export default function AdminOrderTable() {
               <th className="px-3 py-4 text-left min-w-[150px] max-w-[150px]">
                 Địa chỉ lấy
               </th>
-              <th className="px-3 py-4 text-left min-w-[150x] max-w-[150px]">
+              <th className="px-3 py-4 text-left min-w-[150px] max-w-[150px]">
                 Địa chỉ nhận
               </th>
-              <th className="px-3 py-4 text-left min-w-[500px] max-w-[500px]">
+              <th className="px-3 py-4 text-left min-w-[380px] max-w-[380px]">
                 Mô tả
               </th>
               <th className="px-3 py-4 text-left min-w-[120px] max-w-[120px]">
@@ -139,24 +123,23 @@ export default function AdminOrderTable() {
           <tbody>
             {tableData.map((order, index) => (
               <tr
-                key={order.id}
-                onClick={() => handleRowClick(order.id)}
+                key={order.orderCode}
                 style={{
                   backgroundColor: index % 2 == 1 ? "#F1F5F9" : "white",
                 }}
                 className="hover:!bg-red-100/50 cursor-pointer duration-100"
               >
                 <td
-                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[80px] max-w-[80px]"
-                  title={order.code}
+                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[200px] max-w-[200px]"
+                  title={order.orderCode}
                 >
-                  {order.code}
+                  {order.orderCode}
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
-                  title={order.sender}
+                  title={order.senderName}
                 >
-                  {order.sender}
+                  {order.senderName}
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
@@ -166,37 +149,43 @@ export default function AdminOrderTable() {
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[150px] max-w-[150px]"
-                  title={order.shippingAddress}
+                  title={order.deliveryAddress}
                 >
-                  {order.shippingAddress}
+                  {order.deliveryAddress}
                 </td>
                 <td
-                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[500px] max-w-[500px]"
+                  className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[380px] max-w-[380px]"
                   title={order.description}
                 >
                   {order.description}
                 </td>
                 <td
                   className="px-2 py-3 truncate overflow-hidden whitespace-nowrap min-w-[120px] max-w-[120px]"
-                  title={order.status}
+                  title={order.orderStatus}
                 >
-                  {order.status}
+                  {order.orderStatus}
                 </td>
                 <td className="px-2 py-3 max-w-[250px] min-w-[250px]">
                   <div className="flex gap-2 items-center">
                     <button
-                      onClick={(e) => handleCancelClick(e, order.id)}
-                      className="px-4 flex items-center cursor-pointer bg-red-700 hover:brightness-95 duration-100 text-white rounded-sm py-2"
-                    >
-                      <DeleteOutlineIcon fontSize="small" />
-                      <span>Hủy đơn</span>
-                    </button>
-                    <button
-                      onClick={(e) => handleAssignClick(e, order.id)}
+                      onClick={() => handleAssignClick(order.orderCode, order.orderStatus)}
                       className="px-4 flex items-center cursor-pointer bg-green-700 hover:brightness-95 duration-100 text-white rounded-sm py-2"
+                      style={{
+                        backgroundColor:
+                          order.orderStatus !== "Tạo đơn" ? "gray" : "",
+                        cursor:
+                          order.orderStatus !== "Tạo đơn" ? "default" : "",
+                      }}
                     >
                       <AssignmentAddIcon fontSize="small" />
                       <span>Giao đơn</span>
+                    </button>
+                    <button
+                      onClick={() => handleRowClick(order.orderCode)}
+                      className="px-4 flex items-center cursor-pointer bg-blue-800 hover:brightness-95 duration-100 text-white rounded-sm py-2"
+                    >
+                      <AssignmentIcon fontSize="small" />
+                      <span>Chi tiết</span>
                     </button>
                   </div>
                 </td>
@@ -209,18 +198,11 @@ export default function AdminOrderTable() {
         <Pagination
           page={page}
           pageSize={pageSize}
-          total={52}
+          total={totalRecords}
           handlePageChange={(page) => handlePageChange(page)}
           handlePageSizeChange={(size) => handlePageSizeChange(size)}
         />
       </div>
-      {isCancelModalShow && (
-        <AdminOrderCancelModal
-          onCancel={handleCancelModalClose}
-          onOK={handleCancelOK}
-          cancellingId={cancellingId}
-        />
-      )}
       {isAssignModalShow && (
         <AdminOrderAssignModal
           onCancel={handleAssignModalClose}

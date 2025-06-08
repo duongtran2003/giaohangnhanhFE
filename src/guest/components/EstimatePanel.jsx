@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { thirdPartyApi } from "src/share/api";
 import { useLoadingStore } from "src/share/stores/loadingStore";
+import RequiredMark from "src/share/components/RequiredMark";
 
 export default function EstimatePanel() {
   const setLoading = useLoadingStore((state) => state.setLoading);
@@ -58,7 +59,7 @@ export default function EstimatePanel() {
         <div className="flex-1">
           <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
             <div className="mb-4">
-              <label className="block mb-1 font-bold">Quận</label>
+              <label className="block mb-1">Quận <RequiredMark /></label>
               <select
                 {...register("district", {
                   required: "Vui lòng chọn quận",
@@ -81,7 +82,7 @@ export default function EstimatePanel() {
               )}
             </div>
             <div className="mb-4">
-              <label className="block mb-1 font-bold">Phường</label>
+              <label className="block mb-1">Phường <RequiredMark /></label>
               <select
                 {...register("ward", { required: "Vui lòng chọn phường" })}
                 className="w-full border border-gray-300 rounded px-3 py-2"
@@ -100,7 +101,7 @@ export default function EstimatePanel() {
               )}
             </div>
             <div className="mb-4">
-              <label className="block mb-1 font-bold">Khối lượng (kg)</label>
+              <label className="block mb-1">Khối lượng (Kg) <RequiredMark /></label>
               <input
                 type="number"
                 step="0.1"

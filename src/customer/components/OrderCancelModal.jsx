@@ -1,6 +1,5 @@
-export default function OrderCancelModal({ onCancel, onOK, cancellingId }) {
+export default function OrderCancelModal({ onCancel, onOK }) {
   const handleCancel = () => {
-    // Chưa biết gửi gì ra
     onOK();
   }
 

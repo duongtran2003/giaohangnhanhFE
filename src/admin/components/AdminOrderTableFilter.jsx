@@ -1,6 +1,10 @@
 import StatusDropdownFilter from "src/share/components/StatusDropdownFilter";
 
-export default function AdminOrderTableFilter({ onFilterChange, filters }) {
+export default function AdminOrderTableFilter({
+  onFilterChange,
+  filters,
+  onFilter,
+}) {
   const resetFilter = () => {
     onFilterChange({});
   };
@@ -10,7 +14,7 @@ export default function AdminOrderTableFilter({ onFilterChange, filters }) {
 
   const handleFieldChange = (fieldName, value) => {
     onFilterChange({ ...filters, [fieldName]: value });
-  }
+  };
 
   return (
     <div className="flex flex-row gap-2 flex-wrap">
@@ -47,11 +51,35 @@ export default function AdminOrderTableFilter({ onFilterChange, filters }) {
           onChange={handleStatusChange}
         />
       </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm">Ngày bắt đầu</label>
+        <input
+          type="date"
+          onChange={(e) => handleFieldChange("startDate", e.target.value)}
+          placeholder="Mô tả"
+          className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm">Ngày kết thúc</label>
+        <input
+          type="date"
+          onChange={(e) => handleFieldChange("endDate", e.target.value)}
+          placeholder="Mô tả"
+          className="bg-gray-100 border border-gray-300 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
+        />
+      </div>
       <div
         onClick={resetFilter}
         className="h-fit self-end mb-[1px] w-18 text-center text-base bg-red-700 rounded-sm cursor-pointer hover:brightness-95 text-white px-2 py-1"
       >
         Đặt lại
+      </div>
+      <div
+        onClick={onFilter}
+        className="h-fit self-end mb-[1px] w-18 text-center text-base bg-red-700 rounded-sm cursor-pointer hover:brightness-95 text-white px-2 py-1"
+      >
+        Lọc
       </div>
     </div>
   );

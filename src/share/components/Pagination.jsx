@@ -4,18 +4,14 @@ import Dropdown from "./Dropdown";
 import { useMemo } from "react";
 
 export default function Pagination({
-  total = 45,
-  pageSize = 10,
-  page = 1,
+  total,
+  pageSize,
+  page,
   handlePageSizeChange,
   handlePageChange,
 }) {
   const pageSizeOptions = useMemo(() => {
     return [
-      {
-        text: "5 bản ghi",
-        handler: () => handlePageSizeChange(5),
-      },
       {
         text: "10 bản ghi",
         handler: () => handlePageSizeChange(10),

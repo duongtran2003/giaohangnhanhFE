@@ -3,14 +3,7 @@ import roles from "../constants/roles";
 
 export const useAuthStore = create(
   (set) => ({
-    user: {
-      fullName: "duong",
-      roles: [
-        // roles.ADMIN
-        roles.CUSTOMER
-      ]
-    },
-    // user: null,
+    user: null,
     setUser: (userData) => {
       set({ user: userData });
     },

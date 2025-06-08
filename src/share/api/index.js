@@ -16,6 +16,9 @@ api.interceptors.request.use((config) => {
 
 const API_PREFIX = {
   auth: "/auth",
+  order: "/order",
+  tracking: "/tracking",
+  delivery: "/delivery",
 };
 
 export const authApi = {
@@ -36,6 +39,71 @@ export const authApi = {
     return api.get(`${API_PREFIX.auth}/user/my-info`);
   },
 };
+
+export const orderApi = {
+  createOrder: (payload) => {
+    return api.post(`${API_PREFIX.order}/order/create`, payload);
+  },
+
+  getCustomerOrder: (queryString) => {
+
+    return api.get(
+      `${API_PREFIX.order}/order/filter/customer?${queryString}`,
+    );
+  },
+
+  getAdminOrder: (filter, pageIndex, pageSize) => {
+    const params = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      orderCode: filter.code ? filter.code : null,
+      senderName: filter.sender_name ? filter.sender_name : null,
+      description: filter.description ? filter.description : null,
+      orderStatuses:
+        !filter?.statuses ||
+        filter.statuses.length === 0 ||
+        filter.statuses.length === 7
+          ? null
+          : filter.statuses.join(","),
+      startDate: filter.startDate ? filter.startDate : null,
+      endDate: filter.endDate ? filter.endDate : null,
+    };
+    
+    const filteredParams = Object.fromEntries(
+      Object.entries(params).filter(([_, v]) => v != null),
+    );
+
+    const urlParams = new URLSearchParams(filteredParams);
+
+    return api.get(
+      `${API_PREFIX.order}/order/filter/admin?${urlParams.toString()}`,
+    );
+  },
+};
+
+export const trackingApi = {
+  getOrderDetail: (orderCode) => {
+    return api.get(
+      `${API_PREFIX.tracking}/tracking/order/details?orderCode=${orderCode}`,
+    );
+  },
+  
+  getOrderDetailPublic: (orderCode, phone) => {
+    return api.get(
+      `${API_PREFIX.tracking}/tracking/public/order/details?orderCode=${orderCode}&phone=${phone}`,
+    );
+  }
+};
+
+export const deliveryApi = {
+  updateOrderStatus: (payload) => {
+    return api.patch(`${API_PREFIX.delivery}/delivery-order/update-status`, {...payload})
+  },
+
+  getDrivers: () => {
+    return api.get(`${API_PREFIX.auth}/delivery-staff/find-delivery-staff/true`)
+  }
+}
 
 export const thirdPartyApi = {
   getDistricts: () => {
