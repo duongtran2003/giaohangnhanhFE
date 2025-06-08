@@ -114,6 +114,11 @@ export default function AdminUserList() {
     return urlParams.toString();
   };
 
+  const handleOnOk = () => {
+    setIsAddModalShow(false);
+    handleFilter();
+  }
+
   useEffect(() => {
     handleFilter();
   }, [page, pageSize]);
@@ -216,7 +221,7 @@ export default function AdminUserList() {
         </div>
 
         {isAddModalShow && (
-          <AdminAddUserModal onCancel={() => setIsAddModalShow(false)} />
+          <AdminAddUserModal onOK={handleOnOk} onCancel={() => setIsAddModalShow(false)} />
         )}
         <div className="self-end">
           <Pagination
