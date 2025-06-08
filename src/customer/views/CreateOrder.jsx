@@ -79,7 +79,7 @@ export default function CreateOrder() {
     try {
       const response = await orderApi.createOrder(payload);
       toast.success(response.data.message);
-      navigate(`/customer/order/${response.data.id}`);
+      navigate(`/customer/order/detail/${response.data.data.id}`);
     } catch (err) {
       toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
     } finally {
@@ -339,7 +339,7 @@ export default function CreateOrder() {
         </div>
         <button
           type="submit"
-          className="bg-red-700 max-w-[480px] text-white w-full py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer"
+          className="bg-red-700 max-w-[480px] text-white w-[420px] py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer"
         >
           Tạo mới
         </button>

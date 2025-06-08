@@ -6,6 +6,10 @@ export default function OrderStatusPanel({ orderStatus }) {
     <div className="w-full border border-gray-400 p-4 rounded-md">
       <div className="flex flex-row justify-between gap-2">
         <div className="flex-1">
+          <div className="mb-4">
+            <span className="font-bold">Mã đơn hàng:</span>{" "}
+            {orderStatus.orderCode}
+          </div>
           <div>
             <span className="font-bold">Người gửi:</span>{" "}
             {orderStatus.senderName} - {orderStatus.senderPhone}
@@ -61,7 +65,7 @@ export default function OrderStatusPanel({ orderStatus }) {
             <>
               <OrderStatus statusInfo={status} key={index} />
               {index != orderStatus.statusHistory.length - 1 && (
-                <ArrowDownwardIcon key={index} />
+                <ArrowDownwardIcon />
               )}
             </>
           ))}

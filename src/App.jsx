@@ -16,6 +16,15 @@ import AdminOrderList from "./admin/views/AdminOrderList";
 import CreateOrder from "./customer/views/CreateOrder";
 import OrderDetail from "./customer/views/OrderDetail";
 import AdminOrderDetail from "./admin/views/AdminOrderDetail";
+import DeliveryStaffLayout from "./layout/DeliveryStaffLayout";
+import DeliveryStaffOngoingOrders from "./deliveryStaff/views/DeliveryStaffOngoingOrders";
+import StatusToggler from "./deliveryStaff/components/StatusToggler";
+import DeliveryStaffCompletedOrder from "./deliveryStaff/views/DeliveryStaffCompletedOrder";
+import DeliveryStaffCancelledOrder from "./deliveryStaff/views/DeliveryStaffCancelledOrder";
+import DeliveryStaffOrderDetail from "./deliveryStaff/views/DeliveryStaffOrderDetail";
+import DeliveryStaffStat from "./deliveryStaff/views/DeliveryStaffStat";
+import Profile from "./profile/Profile";
+import AdminUserList from "./admin/views/AdminUserList";
 
 function App() {
   return (
@@ -27,14 +36,43 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route element={<CustomerLayout />}>
+            <Route path="/my-profile" element={<Profile />} />
             <Route path="customer/my-orders" element={<OrderList />} />
             <Route path="customer/orders-stat" element={<OrderStat />} />
             <Route path="customer/create-order" element={<CreateOrder />} />
-            <Route path="customer/order/detail/:orderCode" element={<OrderDetail />} />
+            <Route
+              path="customer/order/detail/:orderCode"
+              element={<OrderDetail />}
+            />
           </Route>
           <Route element={<AdminLayout />}>
+            <Route path="/my-profile" element={<Profile />} />
             <Route path="admin/orders" element={<AdminOrderList />} />
-            <Route path="admin/order/detail/:orderCode" element={<AdminOrderDetail />} />
+            <Route path="admin/users" element={<AdminUserList />} />
+            <Route
+              path="admin/order/detail/:orderCode"
+              element={<AdminOrderDetail />}
+            />
+          </Route>
+          <Route element={<DeliveryStaffLayout />}>
+            <Route path="/my-profile" element={<Profile />} />
+            <Route
+              path="delivery/orders/ongoing"
+              element={<DeliveryStaffOngoingOrders />}
+            />
+            <Route
+              path="delivery/orders/completed"
+              element={<DeliveryStaffCompletedOrder />}
+            />
+            <Route
+              path="delivery/orders/cancelled"
+              element={<DeliveryStaffCancelledOrder />}
+            />
+            <Route
+              path="delivery/order/detail/:orderCode"
+              element={<DeliveryStaffOrderDetail />}
+            />
+            <Route path="delivery/statistics" element={<DeliveryStaffStat />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
@@ -52,6 +90,7 @@ function App() {
         limit={5}
       />
       <LoadingOverlay />
+      <StatusToggler />
     </>
   );
 }

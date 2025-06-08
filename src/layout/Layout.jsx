@@ -35,7 +35,7 @@ export default function Layout() {
     <>
       <div>
         <Header />
-        <Navbar />
+        {user && <Navbar />}
         <div className="w-full pb-80">
           <Outlet />
         </div>

@@ -29,7 +29,7 @@ export default function AdminOrderAssignModal({ onCancel, onOK }) {
       toast.error("Vui lòng chọn tài xế");
       return;
     }
-    onOK();
+    onOK(selectedDriver);
   };
 
   return (
@@ -55,8 +55,8 @@ export default function AdminOrderAssignModal({ onCancel, onOK }) {
           >
             <option value="">Chọn tài xế</option>
             {drivers.map((driver) => (
-              <option key={driver.id} value={driver.id}>
-                {driver.name}
+              <option key={driver.userId} value={driver.userId}>
+                {driver.fullName}
               </option>
             ))}
           </select>

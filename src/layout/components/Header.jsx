@@ -22,6 +22,10 @@ export default function Header() {
 
     return [
       {
+        text: "Trang cá nhân",
+        handler:() => navigate('/my-profile'),
+      },
+      {
         text: "Đăng xuất",
         handler: handleLogout,
       },
@@ -35,7 +39,7 @@ export default function Header() {
         onClick={() => navigate("/")}
       >
         <img className="max-h-16" src={DeliveryIcon} alt="Your SVG" />
-        <div>Odms</div>
+        <div>ODMS Express</div>
       </div>
       {user ? (
         <div className="text-white">

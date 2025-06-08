@@ -27,7 +27,7 @@ export default function LookupPanel() {
     } catch (err) {
       toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
 
     console.log(data);
@@ -90,7 +90,7 @@ export default function LookupPanel() {
         {orderStatus && (
           <div className="mt-8">
             <div className="mb-8 text-lg font-medium text-center">
-              Trạng thái đơn hàng
+              Thông tin đơn hàng
             </div>
             <OrderStatusPanel orderStatus={orderStatus} />
           </div>

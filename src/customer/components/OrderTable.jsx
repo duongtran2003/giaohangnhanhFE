@@ -159,6 +159,10 @@ export default function OrderTable() {
     }
   };
 
+  useEffect(() => {
+    handleFilter();
+  }, [page, pageSize]);
+
   return (
     <div className="max-w-fit flex flex-col relative">
       {isLoadingData && (

@@ -13,7 +13,7 @@ export default function OrderStatus({ statusInfo }) {
       </div>
       {isExpanded && (
         <div className="bg-white rounded-b-md p-4 italic text-sm">
-          <div>{statusInfo.createdBy}</div>
+          <div>Người cập nhật: {statusInfo.createdBy}</div>
           <div>{statusInfo.updatedAt}</div>
           {statusInfo.reasonCancel && <div>Lí do hủy: {statusInfo.reasonCancel}</div>}
           {statusInfo.noteCancel && <div>Ghi chú khi hủy: {statusInfo.noteCancel}</div>}

@@ -4,9 +4,11 @@ import Pagination from "src/share/components/Pagination";
 import { MoonLoader } from "react-spinners";
 import AssignmentAddIcon from "@mui/icons-material/AssignmentAdd";
 import AdminOrderAssignModal from "./AdminOrderAssignModal";
-import { orderApi } from "src/share/api";
+import { deliveryApi, orderApi } from "src/share/api";
 import { toast } from "react-toastify";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { useLoadingStore } from "src/share/stores/loadingStore";
+import orderStatus from "src/share/constants/orderStatus";
 
 export default function AdminOrderTable() {
   const [filter, setFilter] = useState({
@@ -24,6 +26,7 @@ export default function AdminOrderTable() {
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const setLoading = useLoadingStore((state) => state.setLoading);
 
   const handleFilterChange = (filter) => {
     setFilter(filter);
@@ -86,8 +89,24 @@ export default function AdminOrderTable() {
     setIsAssignModalShow(false);
   };
 
-  const handleAssignOK = () => {
-    // call api here
+  const handleAssignOK = async (driverId) => {
+    setLoading(true);
+    try {
+      const res = await deliveryApi.updateOrderStatus({
+        orderCode: assigningId,
+        status: orderStatus.ASSIGNED,
+        deliveryStaffId: driverId,
+      });
+      toast.success(res.data.message);
+      setIsAssignModalShow(false);
+      const queryString = convertToQueryString();
+      fetchData(queryString);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
+    } finally {
+      setLoading(false);
+    }
+    console.log(driverId);
   };
 
   const convertToQueryString = () => {
@@ -130,6 +149,10 @@ export default function AdminOrderTable() {
       setIsLoadingData(false);
     }
   };
+
+  useEffect(() => {
+    handleFilter();
+  }, [page, pageSize]);
 
   const handleFilter = async () => {
     const url = new URL(window.location.href);
