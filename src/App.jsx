@@ -35,8 +35,8 @@ function App() {
         <Route path="/auth/verify-email/:token" element={<VerifyAccount />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/my-profile" element={<Profile />} />
           <Route element={<CustomerLayout />}>
-            <Route path="/my-profile" element={<Profile />} />
             <Route path="customer/my-orders" element={<OrderList />} />
             <Route path="customer/orders-stat" element={<OrderStat />} />
             <Route path="customer/create-order" element={<CreateOrder />} />
@@ -46,7 +46,6 @@ function App() {
             />
           </Route>
           <Route element={<AdminLayout />}>
-            <Route path="/my-profile" element={<Profile />} />
             <Route path="admin/orders" element={<AdminOrderList />} />
             <Route path="admin/users" element={<AdminUserList />} />
             <Route
@@ -55,7 +54,6 @@ function App() {
             />
           </Route>
           <Route element={<DeliveryStaffLayout />}>
-            <Route path="/my-profile" element={<Profile />} />
             <Route
               path="delivery/orders/ongoing"
               element={<DeliveryStaffOngoingOrders />}

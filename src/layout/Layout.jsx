@@ -14,10 +14,12 @@ export default function Layout() {
   const user = useAuthStore((state) => state.user);
   const setLoading = useLoadingStore((state) => state.setLoading);
   const isLoading = useLoadingStore((state) => state.isLoading);
+  const [isFetchingUser, setIsFetchingUser] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
+    setIsFetchingUser(true);
     authApi
       .getMe()
       .then((res) => {
@@ -28,6 +30,7 @@ export default function Layout() {
       })
       .finally(() => {
         setLoading(false);
+        setIsFetchingUser(false);
       });
   }, []);
 
@@ -37,7 +40,7 @@ export default function Layout() {
         <Header />
         {user && <Navbar />}
         <div className="w-full pb-80">
-          <Outlet />
+          { !isFetchingUser && <Outlet /> }
         </div>
         <Footer />
       </div>

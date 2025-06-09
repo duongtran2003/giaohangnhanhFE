@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { authApi } from "src/share/api";
 import { useAuthStore } from "src/share/stores/authStore";
@@ -8,10 +9,10 @@ export default function Profile() {
   const setLoading = useLoadingStore((state) => state.setLoading);
   const setUser = useAuthStore((state) => state.setUser);
   const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-
     authApi
       .getMe()
       .then((res) => {
@@ -19,6 +20,7 @@ export default function Profile() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
+        navigate("/");
       })
       .finally(() => {
         setLoading(false);
