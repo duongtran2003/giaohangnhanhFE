@@ -31,19 +31,6 @@ export default function CreateOrder() {
   const steps = ["Ước tính chi phí", "Hoàn thành đơn hàng"];
 
   useEffect(() => {
-    setEstimation(null);
-  }, [
-    watch("shippingDistrict"),
-    watch("shippingWard"),
-    watch("shippingStreet"),
-    watch("pickupDistrict"),
-    watch("pickupWard"),
-    watch("pickupStreet"),
-    watch("packageWeigth"),
-    watch("packageSize"),
-  ]);
-
-  useEffect(() => {
     resetField("pickupWard");
     const district = pickupDistricts.find(
       (district) => district.name === selectedPickupDistrictCode,
