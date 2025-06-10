@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Outlet, useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { authApi } from "src/share/api";
 import tokenUtils from "src/share/utils/tokenUtils";
 import { toast } from "react-toastify";
@@ -39,8 +39,8 @@ export default function Layout() {
       <div>
         <Header />
         {user && <Navbar />}
-        <div className="w-full pb-80">
-          { !isFetchingUser && <Outlet /> }
+        <div className="w-full min-h-[100vh] pb-80">
+          {!isFetchingUser && <Outlet />}
         </div>
         <Footer />
       </div>

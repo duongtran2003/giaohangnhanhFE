@@ -11,6 +11,8 @@ export default function CreateOrder() {
     register,
     handleSubmit,
     watch,
+    trigger,
+    getValues,
     resetField,
     formState: { errors },
   } = useForm();
@@ -19,6 +21,7 @@ export default function CreateOrder() {
 
   const [pickupDistricts, setPickupDistricts] = useState([]);
   const [pickupWards, setPickupWards] = useState([]);
+  const [estimation, setEstimation] = useState(null);
 
   const [shippingDistricts, setShippingDistricts] = useState([]);
   const [shippingWards, setShippingWards] = useState([]);
@@ -26,6 +29,36 @@ export default function CreateOrder() {
   const setLoading = useLoadingStore((state) => state.setLoading);
   const selectedPickupDistrictCode = watch("pickupDistrict");
   const selectedDeliveryDistrictCode = watch("shippingDistrict");
+
+  const [
+    shippingDistrict,
+    shippingWard,
+    shippingStreet,
+    pickupDistrict,
+    pickupWard,
+    pickupStreet,
+    packageWeigth,
+  ] = watch([
+    "shippingDistrict",
+    "shippingWard",
+    "shippingStreet",
+    "pickupDistrict",
+    "pickupWard",
+    "pickupStreet",
+    "packageWeigth",
+  ]);
+
+  useEffect(() => {
+    setEstimation(null);
+  }, [
+    shippingDistrict,
+    shippingWard,
+    shippingStreet,
+    pickupDistrict,
+    pickupWard,
+    pickupStreet,
+    packageWeigth,
+  ]);
 
   useEffect(() => {
     resetField("pickupWard");
@@ -62,6 +95,46 @@ export default function CreateOrder() {
         setLoading(false);
       });
   }, []);
+
+  const handleEstimateClick = async (e) => {
+    e.preventDefault();
+    const res = await trigger([
+      "shippingDistrict",
+      "shippingWard",
+      "shippingStreet",
+      "pickupDistrict",
+      "pickupWard",
+      "pickupStreet",
+      "packageWeigth",
+    ]);
+    if (res) {
+      const data = getValues([
+        "shippingDistrict",
+        "shippingWard",
+        "shippingStreet",
+        "pickupDistrict",
+        "pickupWard",
+        "pickupStreet",
+        "packageWeigth",
+      ]);
+      setLoading(true);
+      try {
+        console.log(data);
+        const payload = {
+          pickupAddress: `${data[5]}, ${data[4]}, ${data[3]}`,
+          deliveryAddress: `${data[2]}, ${data[1]}, ${data[0]}`,
+          weight: data[6],
+        };
+        const res = await orderApi.estimateShippingFee(payload);
+        setEstimation(res.data.data);
+        console.log(res);
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Có lỗi xảy ra");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   const onSubmit = async (data) => {
     const payload = {
@@ -175,6 +248,13 @@ export default function CreateOrder() {
               <input
                 {...register("packageWeigth", {
                   required: "Vui lòng nhập trọng lượng kiện hàng",
+                  valueAsNumber: true,
+                  min: {
+                    value: 0,
+                    message: "Trọng lượng phải là số không âm",
+                  },
+                  validate: (value) =>
+                    !isNaN(value) || "Giá trị phải là một số hợp lệ",
                 })}
                 className="bg-gray-100 border border-gray-300 flex-1 px-2 py-1 rounded-md outline-none hover:border-red-500/40 focus:border-red-500/40 duration-200"
               />
@@ -337,12 +417,37 @@ export default function CreateOrder() {
             )}
           </div>
         </div>
+        {estimation && (
+          <div className="mt-4 border border-red-300 w-fit rounded-md p-2 bg-red-300/20">
+            <div>
+              <span className="font-medium text-red-700">
+                Quãng đường ước tính:{" "}
+              </span>
+              {estimation.estimateDistance}
+            </div>
+            <div>
+              <span className="font-medium text-red-700">
+                Cước phí ước tính:{" "}
+              </span>
+              {estimation.estimateFee}
+            </div>
+          </div>
+        )}
         <button
+          onClick={(e) => handleEstimateClick(e)}
           type="submit"
           className="bg-red-700 max-w-[480px] text-white w-[420px] py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer"
         >
-          Tạo mới
+          Ước tính
         </button>
+        {estimation && (
+          <button
+            type="submit"
+            className="bg-red-700 max-w-[480px] text-white w-[420px] py-2 mt-4 rounded-sm hover:brightness-95 duration-100 cursor-pointer"
+          >
+            Tạo mới
+          </button>
+        )}
       </form>
     </div>
   );
